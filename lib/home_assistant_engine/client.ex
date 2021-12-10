@@ -1,8 +1,8 @@
 defmodule HomeAssistantEngine.Client do
   use WebSockex
 
-  def start_link([url, state]) do
-    WebSockex.start_link(url, __MODULE__, state)
+  def start_link(url) do
+    WebSockex.start_link(url, __MODULE__, %{id: 0})
   end
 
   def handle_connect(_conn, state) do
@@ -15,7 +15,7 @@ defmodule HomeAssistantEngine.Client do
     {:ok, state}
   end
 
-  def handle_frame({type, msg}, state) do
+  def handle_frame({type, msg}, %{id: id} = state) do
     case Jason.decode(msg) do
       {:ok, %{"type" => "auth_required"}} ->
         {:ok, reply} =
@@ -25,6 +25,15 @@ defmodule HomeAssistantEngine.Client do
           })
 
         {:reply, {:text, reply}, state}
+
+      {:ok, %{"type" => "auth_ok"}} ->
+        {:ok, reply} =
+          Jason.encode(%{
+            id: id + 1,
+            type: "get_states"
+          })
+
+        {:reply, {:text, reply}, %{state | id: id + 1}}
 
       _ ->
         IO.puts("Received Message - Type: #{inspect(type)} -- Message: #{inspect(msg)}")
