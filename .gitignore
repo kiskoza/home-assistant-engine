@@ -27,3 +27,5 @@ home_assistant_engine-*.tar
 
 # Home assistant configs
 ha-config
+
+.env

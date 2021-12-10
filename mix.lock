@@ -1,3 +1,5 @@
 %{
+  "dotenvy": {:hex, :dotenvy, "0.3.0", "f5707bf01260a7a34707fa28bff24513479dc2d7a03e25bfafb71b3f1f41bc5b", [:mix], [], "hexpm", "a46c9338f451d0459cdb51bc9c7ceb7aec05b42206dd2ab4ccc86420170ff497"},
+  "jason": {:hex, :jason, "1.2.2", "ba43e3f2709fd1aa1dce90aaabfd039d000469c05c56f0b8e31978e03fa39052", [:mix], [{:decimal, "~> 1.0 or ~> 2.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "18a228f5f0058ee183f29f9eae0805c6e59d61c3b006760668d8d18ff0d12179"},
   "websockex": {:hex, :websockex, "0.4.3", "92b7905769c79c6480c02daacaca2ddd49de936d912976a4d3c923723b647bf0", [:mix], [], "hexpm", "95f2e7072b85a3a4cc385602d42115b73ce0b74a9121d0d6dbbf557645ac53e4"},
 }

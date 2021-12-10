@@ -22,6 +22,8 @@ defmodule HomeAssistantEngine.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:dotenvy, "~> 0.3.0"},
+      {:jason, "~> 1.2"},
       {:websockex, "~> 0.4.3"}
     ]
   end
