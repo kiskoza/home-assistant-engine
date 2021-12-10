@@ -9,7 +9,7 @@ defmodule HomeAssistantEngine.Application do
   def start(_type, _args) do
     children = [
       # Starts a worker by calling: HomeAssistantEngine.Worker.start_link(arg)
-      # {HomeAssistantEngine.Worker, arg}
+      {HomeAssistantEngine.Client, ["ws://127.0.0.1:8123/api/websocket", {}]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

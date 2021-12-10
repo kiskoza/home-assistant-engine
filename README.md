@@ -20,3 +20,4 @@ I would like to move my automations from cryptic yml files to nice, testable eli
 ## Run the project in development
 
 1. `docker start homeassistant` and `docker stop homeassistant` to manage the homeassistant instance
+2. Start the app with `mix run --no-halt`
