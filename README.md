@@ -1,21 +1,22 @@
-# HomeAssistantEngine
+# Home Assisstant Engine
 
-**TODO: Add description**
+I would like to move my automations from cryptic yml files to nice, testable elixir modules. Let's brew something...
 
-## Installation
+## Set up the project
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `home_assistant_engine` to your list of dependencies in `mix.exs`:
+1. Get a running Home Assistant using docker.
+  ```bash
+    docker run \
+      --name homeassistant \
+      --privileged \
+      --restart=unless-stopped \
+      -e TZ=Europe/Budapest \
+      -v $(pwd)/ha-config:/config \
+      --network=host \
+      ghcr.io/home-assistant/home-assistant:stable
+  ```
+2. Go through the Onboarding process
 
-```elixir
-def deps do
-  [
-    {:home_assistant_engine, "~> 0.1.0"}
-  ]
-end
-```
+## Run the project in development
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/home_assistant_engine](https://hexdocs.pm/home_assistant_engine).
-
+1. `docker start homeassistant` and `docker stop homeassistant` to manage the homeassistant instance

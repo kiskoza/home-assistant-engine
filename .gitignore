@@ -24,3 +24,6 @@ home_assistant_engine-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# Home assistant configs
+ha-config
