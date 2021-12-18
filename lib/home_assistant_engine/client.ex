@@ -31,24 +31,34 @@ defmodule HomeAssistantEngine.Client do
 
   def handle_frame({:text, msg}, state) do
     case Jason.decode(msg) do
-      {:ok, %{"type" => "auth_required"} = response} -> handle_auth_required(response, state)
-      {:ok, %{"type" => "auth_ok"} = response} -> handle_auth_ok(response, state)
-      {:ok, %{"type" => "result", "success" => true} = response} -> handle_successful_result(response, state)
-      {:ok, %{"type" => "event"} = response} -> handle_event(response, state)
-      {:ok, response} -> handle_unknown(response, state)
+      {:ok, %{"type" => "auth_required"} = response} ->
+        handle_auth_required(response, state)
+
+      {:ok, %{"type" => "auth_ok"} = response} ->
+        handle_auth_ok(response, state)
+
+      {:ok, %{"type" => "result", "success" => true} = response} ->
+        handle_successful_result(response, state)
+
+      {:ok, %{"type" => "event"} = response} ->
+        handle_event(response, state)
+
+      {:ok, response} ->
+        handle_unknown(response, state)
     end
   end
 
   def handle_cast({:send, {:text, msg}}, {id, pending, automations}) do
     id = id + 1
 
-    {:ok, reply} = msg
-    |> Map.put(:id, id)
-    |> Map.put(:type, "call_service")
-    |> Jason.encode()
+    {:ok, reply} =
+      msg
+      |> Map.put(:id, id)
+      |> Map.put(:type, "call_service")
+      |> Jason.encode()
 
     IO.puts("Sending json frame with payload: #{reply}")
-    {:reply, {:text, reply}, {id, [{id, :call_service} | pending], automations }}
+    {:reply, {:text, reply}, {id, [{id, :call_service} | pending], automations}}
   end
 
   defp handle_auth_required(_response, state) do
@@ -131,6 +141,7 @@ defmodule HomeAssistantEngine.Client do
   defp reply_with_get_states_request({id, pending, automations}) do
     IO.puts("Request current states")
     id = id + 1
+
     {:ok, reply} =
       Jason.encode(%{
         id: id,
@@ -142,6 +153,7 @@ defmodule HomeAssistantEngine.Client do
 
   defp handle_get_states(%{"result" => results}, {_, _, automations}) do
     IO.puts("Got states")
+
     results
     |> Enum.each(fn result ->
       automations |> Enum.each(fn module -> module.set_entity(result) end)
@@ -150,10 +162,12 @@ defmodule HomeAssistantEngine.Client do
 
   defp subscribe_events_request({id, pending, automations}) do
     id = id + 1
-    {:ok, reply} = Jason.encode(%{
-      id: id,
-      type: "subscribe_events"
-    })
+
+    {:ok, reply} =
+      Jason.encode(%{
+        id: id,
+        type: "subscribe_events"
+      })
 
     {:reply, {:text, reply}, {id, [{id, :subscribe_events} | pending], automations}}
   end
@@ -161,9 +175,11 @@ defmodule HomeAssistantEngine.Client do
   defp get_call_type(_, [], _) do
     {:error, :not_in_the_list}
   end
+
   defp get_call_type(id, [{id, type} | tail], remaining) do
     {:ok, type, remaining ++ tail}
   end
+
   defp get_call_type(id, [head | tail], remaining) do
     get_call_type(id, tail, [head | remaining])
   end

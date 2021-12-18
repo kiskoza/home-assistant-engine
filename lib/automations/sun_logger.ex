@@ -36,12 +36,23 @@ defmodule Automations.SunLogger do
     {:noreply, state}
   end
 
-  def handle_cast({:entity_changed, _, %{"entity_id" => "sun.sun", "state" => current_state}}, {_, current_state} = state) do
+  def handle_cast(
+        {:entity_changed, _, %{"entity_id" => "sun.sun", "state" => current_state}},
+        {_, current_state} = state
+      ) do
     {:noreply, state}
   end
 
-  def handle_cast({:entity_changed, _, %{"entity_id" => "sun.sun", "state" => new_state}}, {pid, _}) do
-    HomeAssistantEngine.Client.reply(pid, %{domain: "persistent_notification", service: "create", service_data: %{message: "The sun is #{new_state}"}})
+  def handle_cast(
+        {:entity_changed, _, %{"entity_id" => "sun.sun", "state" => new_state}},
+        {pid, _}
+      ) do
+    HomeAssistantEngine.Client.reply(pid, %{
+      domain: "persistent_notification",
+      service: "create",
+      service_data: %{message: "The sun is #{new_state}"}
+    })
+
     {:noreply, {pid, new_state}}
   end
 

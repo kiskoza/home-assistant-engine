@@ -25,6 +25,7 @@ defmodule Automations.SunLoggerTest do
   test "handles multiple calls" do
     Automations.SunLogger.set_entity(%{"entity_id" => "sun.sun", "state" => "below_horizon"})
     Automations.SunLogger.set_entity(%{"entity_id" => "sun.sun", "state" => "above_horizon"})
+
     Automations.SunLogger.set_entity(%{"entity_id" => "other.entity", "state" => "something_else"})
 
     assert Automations.SunLogger.get_state() == {"above_horizon"}
@@ -32,15 +33,31 @@ defmodule Automations.SunLoggerTest do
 
   test "handles change entity action" do
     Automations.SunLogger.set_entity(%{"entity_id" => "sun.sun", "state" => "below_horizon"})
-    Automations.SunLogger.change_entity(%{}, %{"entity_id" => "sun.sun", "state" => "above_horizon"})
+
+    Automations.SunLogger.change_entity(%{}, %{
+      "entity_id" => "sun.sun",
+      "state" => "above_horizon"
+    })
 
     assert Automations.SunLogger.get_state() == {"above_horizon"}
-    assert_received {_, {:send, {:text, %{domain: "persistent_notification", service: "create", service_data: %{message: "The sun is above_horizon"}}}}}
+
+    assert_received {_,
+                     {:send,
+                      {:text,
+                       %{
+                         domain: "persistent_notification",
+                         service: "create",
+                         service_data: %{message: "The sun is above_horizon"}
+                       }}}}
   end
 
   test "handles change entity action when the state remained the same" do
     Automations.SunLogger.set_entity(%{"entity_id" => "sun.sun", "state" => "below_horizon"})
-    Automations.SunLogger.change_entity(%{}, %{"entity_id" => "sun.sun", "state" => "below_horizon"})
+
+    Automations.SunLogger.change_entity(%{}, %{
+      "entity_id" => "sun.sun",
+      "state" => "below_horizon"
+    })
 
     assert Automations.SunLogger.get_state() == {"below_horizon"}
     refute_received {_, {:send, {:text, _}}}
