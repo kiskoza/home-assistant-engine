@@ -44,7 +44,7 @@ defmodule Automations.SunLogger do
         {:entity_changed, _, %{"entity_id" => "sun.sun", "state" => new_state}},
         {pid, _}
       ) do
-    HomeAssistantEngine.Client.reply(pid, %{
+    HomeAssistantEngine.reply(pid, %{
       domain: "persistent_notification",
       service: "create",
       service_data: %{message: "The sun is #{new_state}"}
