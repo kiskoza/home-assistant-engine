@@ -6,11 +6,7 @@ defmodule HomeAssistantEngine.Application do
   use Application
 
   @impl true
-  def start(_type, _args) do
-    automations = [
-      Automations.SunLogger
-    ]
-
+  def start(_type, automations) do
     client = [
       # Starts a worker by calling: HomeAssistantEngine.Worker.start_link(arg)
       {HomeAssistantEngine, {"ws://127.0.0.1:8123/api/websocket", automations}}
